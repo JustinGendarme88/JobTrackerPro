@@ -7,7 +7,9 @@ export default function NewApplicationPage() {
         <h1 className="text-4xl font-bold mb-8">
           Add Application
         </h1>
-
+            <a href="/applications" className="text-zinc-400 hover:text-white">
+            ← Back to applications
+            </a>
         <form
           action={createApplication}
           className="space-y-6"
