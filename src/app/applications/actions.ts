@@ -27,3 +27,37 @@ export async function createApplication(formData: FormData) {
 
   redirect("/applications");
 }
+
+export async function deleteApplication(formData: FormData) {
+  const id = formData.get("id") as string;
+
+  await prisma.jobApplication.delete({
+    where: {
+      id,
+    },
+  });
+
+  redirect("/applications");
+}
+
+export async function updateApplication(formData: FormData) {
+  const id = formData.get("id") as string;
+  const company = formData.get("company") as string;
+  const position = formData.get("position") as string;
+  const location = formData.get("location") as string;
+  const status = formData.get("status") as string;
+
+  await prisma.jobApplication.update({
+    where: {
+      id,
+    },
+    data: {
+      company,
+      position,
+      location,
+      status,
+    },
+  });
+
+  redirect("/applications");
+}

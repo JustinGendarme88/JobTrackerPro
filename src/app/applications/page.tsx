@@ -1,126 +1,107 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
+import {
+  deleteApplication,
+} from "./actions";
 
-export default async function HomePage() {
-  const applications = await prisma.jobApplication.findMany();
+  export default async function ApplicationsPage() {
+    const applications =
+      await prisma.jobApplication.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-  const totalApplications = applications.length;
+  function getStatusColor(status: string) {
+    switch (status) {
+      case "APPLIED":
+        return "bg-blue-600";
 
-  const interviews = applications.filter(
-    (app) => app.status === "INTERVIEW"
-  ).length;
+      case "INTERVIEW":
+        return "bg-yellow-500 text-black";
 
-  const rejected = applications.filter(
-    (app) => app.status === "REJECTED"
-  ).length;
+      case "REJECTED":
+        return "bg-red-600";
 
-  const interested = applications.filter(
-    (app) => app.status === "INTERESTED"
-  ).length;
+      case "INTERESTED":
+        return "bg-green-600";
+
+      default:
+        return "bg-zinc-600";
+    }
+  }
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-10">
-          <div>
-            <h1 className="text-5xl font-bold">
-              Job Tracker Pro
-            </h1>
-
-            <p className="text-zinc-400 mt-2">
-              Track your applications and interviews
-            </p>
-          </div>
-
+      <div className="flex items-center justify-between mb-8">
+        <div>
           <Link
-            href="/applications"
-            className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-xl font-semibold"
+            href="/"
+            className="text-zinc-400 hover:text-white"
           >
-            View Applications
+            ← Back to dashboard
           </Link>
+
+          <h1 className="text-4xl font-bold mt-4">
+            Job Applications
+          </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <p className="text-zinc-400 mb-2">
-              Total Applications
+        <Link
+          href="/applications/new"
+          className="bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-lg font-semibold"
+        >
+          + Add Application
+        </Link>
+      </div>
+
+      <div className="grid gap-4">
+        {applications.map((application) => (
+          <div
+            key={application.id}
+            className="bg-zinc-900 border border-zinc-800 rounded-xl p-4"
+          >
+            <h2 className="text-2xl font-semibold">
+              {application.position}
+            </h2>
+
+            <p className="text-zinc-400">
+              {application.company}
             </p>
 
-            <h2 className="text-4xl font-bold">
-              {totalApplications}
-            </h2>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <p className="text-zinc-400 mb-2">
-              Interviews
+            <p className="text-zinc-500">
+              {application.location}
             </p>
 
-            <h2 className="text-4xl font-bold text-blue-400">
-              {interviews}
-            </h2>
-          </div>
+            <div className={`mt-3 inline-block px-3 py-1 rounded-lg text-sm ${getStatusColor(application.status)}`}>
+              {application.status}
+            </div>
 
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <p className="text-zinc-400 mb-2">
-              Interested
-            </p>
-
-            <h2 className="text-4xl font-bold text-yellow-400">
-              {interested}
-            </h2>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-            <p className="text-zinc-400 mb-2">
-              Rejected
-            </p>
-
-            <h2 className="text-4xl font-bold text-red-400">
-              {rejected}
-            </h2>
-          </div>
-        </div>
-
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">
-              Recent Applications
-            </h2>
-
-            <Link
-              href="/applications/new"
-              className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg"
-            >
-              + Add
-            </Link>
-          </div>
-
-          <div className="space-y-4">
-            {applications.map((application) => (
-              <div
-                key={application.id}
-                className="bg-zinc-950 border border-zinc-800 rounded-xl p-4"
+            <div className="mt-4 flex items-center gap-2">
+              <Link
+                href={`/applications/${application.id}/edit`}
+                className="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded-lg text-sm font-semibold"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold">
-                      {application.position}
-                    </h3>
+                Edit
+              </Link>
 
-                    <p className="text-zinc-400">
-                      {application.company}
-                    </p>
-                  </div>
+              <form action={deleteApplication}>
+                <input
+                  type="hidden"
+                  name="id"
+                  value={application.id}
+                />
 
-                  <div className="bg-blue-600 px-3 py-1 rounded-lg text-sm">
-                    {application.status}
-                  </div>
-                </div>
-              </div>
-            ))}
+                <button
+                  type="submit"
+                  className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg text-sm font-semibold"
+                >
+                  Delete
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </main>
   );
