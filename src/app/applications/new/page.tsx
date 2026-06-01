@@ -2,7 +2,7 @@ import { createApplication } from "../actions";
 
 export default function NewApplicationPage() {
   return (
-    <main className="min-h-screen bg-zinc-950 text-white p-8">
+    <section>
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">
           Add Application
@@ -88,6 +88,6 @@ export default function NewApplicationPage() {
           </button>
         </form>
       </div>
-    </main>
+    </section>
   );
 }

@@ -19,7 +19,7 @@ export default async function HomePage() {
   ).length;
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white p-8">
+    <section>
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
@@ -122,6 +122,6 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

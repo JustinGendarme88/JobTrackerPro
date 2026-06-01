@@ -25,7 +25,7 @@ export default async function EditApplicationPage({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white p-8">
+    <section>
       <div className="max-w-2xl mx-auto">
         <Link
           href="/applications"
@@ -96,6 +96,6 @@ export default async function EditApplicationPage({
           </button>
         </form>
       </div>
-    </main>
+    </section>
   );
 }
