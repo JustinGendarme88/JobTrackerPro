@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
 import { deleteApplication } from "./actions";
+import DeleteButton from "@/components/DeleteButton";
 
 type ApplicationsPageProps = {
   searchParams: Promise<{
@@ -88,7 +89,9 @@ export default async function ApplicationsPage({
         </Link>
       </div>
 
-      <form className="mb-6 flex gap-3" action="/applications">
+      <form
+        className="mb-6 flex flex-col gap-3 lg:flex-row"
+        action="/applications">
         <input
           type="text"
           name="search"
@@ -119,7 +122,7 @@ export default async function ApplicationsPage({
         {(search || status !== "ALL") && (
           <Link
             href="/applications"
-            className="rounded-lg border border-zinc-700 px-5 py-3 font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            className="rounded-lg border border-zinc-700 px-5 py-3 text-center font-semibold text-zinc-300 hover:bg-zinc-800 hover:text-white"
           >
             Clear
           </Link>
@@ -131,51 +134,35 @@ export default async function ApplicationsPage({
         {applications.length !== 1 ? "s" : ""} found
       </div>
 
+      {applications.length === 0 ? (
+  <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-900 p-10 text-center">
+    <h2 className="text-2xl font-semibold text-white">
+      No applications found
+    </h2>
+
+    <p className="mt-2 text-zinc-400">
+      Try adjusting your search filters or create a new job application.
+    </p>
+
+        <Link
+          href="/applications/new"
+          className="mt-6 inline-block rounded-lg bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-500"
+        >
+          + Add Application
+        </Link>
+      </div>
+    ) : (
       <div className="grid gap-4">
         {applications.map((application) => (
           <div
             key={application.id}
             className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
           >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-semibold">
-                  {application.position}
-                </h2>
-                <p className="text-zinc-400">{application.company}</p>
-                <p className="text-zinc-500">{application.location}</p>
-              </div>
-
-              <div
-                className={`rounded-lg px-3 py-1 text-sm ${getStatusColor(
-                  application.status
-                )}`}
-              >
-                {application.status}
-              </div>
-            </div>
-
-            <div className="mt-5 flex items-center gap-2">
-              <Link
-                href={`/applications/${application.id}/edit`}
-                className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
-              >
-                Edit
-              </Link>
-
-              <form action={deleteApplication}>
-                <input type="hidden" name="id" value={application.id} />
-                <button
-                  type="submit"
-                  className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold hover:bg-red-500"
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
+            {/* ta card actuelle ici */}
           </div>
         ))}
       </div>
-    </section>
+    )}
+        </section>
   );
 }
