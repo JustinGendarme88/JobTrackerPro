@@ -155,11 +155,48 @@ export default async function ApplicationsPage({
       <div className="grid gap-4">
         {applications.map((application) => (
           <div
-            key={application.id}
-            className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
-          >
-            {/* ta card actuelle ici */}
-          </div>
+  key={application.id}
+  className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
+>
+    <div className="flex items-start justify-between gap-4">
+      <div>
+        <h2 className="text-2xl font-semibold">
+          {application.position}
+        </h2>
+
+        <p className="text-zinc-400">
+          {application.company}
+        </p>
+
+        <p className="text-zinc-500">
+          {application.location}
+        </p>
+      </div>
+
+      <div
+        className={`rounded-lg px-3 py-1 text-sm ${getStatusColor(
+          application.status
+        )}`}
+      >
+        {application.status}
+      </div>
+    </div>
+
+    <div className="mt-5 flex items-center gap-2">
+      <Link
+        href={`/applications/${application.id}/edit`}
+        className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
+      >
+        Edit
+      </Link>
+
+      <form action={deleteApplication}>
+        <input type="hidden" name="id" value={application.id} />
+
+        <DeleteButton message="Are you sure you want to delete this application?" />
+      </form>
+    </div>
+  </div>
         ))}
       </div>
     )}

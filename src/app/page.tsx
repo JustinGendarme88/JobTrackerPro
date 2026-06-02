@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 
 export default async function HomePage() {
+  
+  const user = await requireCurrentUser();
+
   const applications = await prisma.jobApplication.findMany({
+    where: {
+      userId: user.id,
+    },
     orderBy: {
       createdAt: "desc",
     },

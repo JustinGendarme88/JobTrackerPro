@@ -15,7 +15,7 @@ const navItems = [
   },
   {
     label: "Calendar",
-    href: "#",
+    href: "/calendar",
   },
   {
     label: "Settings",

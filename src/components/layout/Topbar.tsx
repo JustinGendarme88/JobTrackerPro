@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import MobileNav from "./MobileNav";
+import { logout } from "@/app/logout/actions";
 
 function getPageInfo(pathname: string) {
   if (pathname === "/") {
@@ -62,9 +63,14 @@ export default function Topbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="hidden rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white sm:block">
-          Notifications
-        </button>
+        <form action={logout}>
+          <button
+            type="submit"
+            className="hidden rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white sm:block"
+          >
+            Logout
+          </button>
+        </form>
 
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-semibold text-white">
           J
