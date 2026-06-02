@@ -36,7 +36,34 @@ export default async function HomePage() {
   const interested = applications.filter(
     (app) => app.status === "INTERESTED"
   ).length;
+  const applied = applications.filter(
+    (app) => app.status === "APPLIED"
+  ).length;
 
+  const statusStats = [
+  {
+    label: "Applied",
+    count: applied,
+    color: "bg-blue-600",
+  },
+  {
+    label: "Interview",
+    count: interviews,
+    color: "bg-yellow-500",
+  },
+  {
+    label: "Interested",
+    count: interested,
+    color: "bg-green-600",
+  },
+  {
+    label: "Rejected",
+    count: rejected,
+    color: "bg-red-600",
+  },
+];
+
+const maxStatusCount = Math.max(...statusStats.map((status) => status.count), 1);
   return (
     <section>
       <div className="mx-auto max-w-7xl">
@@ -56,7 +83,7 @@ export default async function HomePage() {
             View Applications
           </Link>
         </div>
-
+        
         <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-4">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
             <p className="mb-2 text-zinc-400">Total Applications</p>
@@ -82,6 +109,45 @@ export default async function HomePage() {
             <h2 className="text-4xl font-bold text-red-400">
               {rejected}
             </h2>
+          </div>
+        </div>
+
+        <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">
+                Applications by Status
+              </h2>
+
+              <p className="mt-1 text-sm text-zinc-400">
+                Overview of your current application pipeline.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {statusStats.map((status) => (
+              <div key={status.label}>
+                <div className="mb-2 flex items-center justify-between text-sm">
+                  <span className="font-medium text-zinc-300">
+                    {status.label}
+                  </span>
+
+                  <span className="text-zinc-400">
+                    {status.count}
+                  </span>
+                </div>
+
+                <div className="h-3 rounded-full bg-zinc-800">
+                  <div
+                    className={`h-3 rounded-full ${status.color}`}
+                    style={{
+                      width: `${(status.count / maxStatusCount) * 100}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
