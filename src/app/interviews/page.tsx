@@ -1,5 +1,7 @@
 import Link from "next/link";
+import DeleteButton from "@/components/DeleteButton";
 import { prisma } from "@/app/lib/prisma";
+import { deleteInterview } from "./actions";
 
 export default async function InterviewsPage() {
   const interviews = await prisma.interview.findMany({
@@ -70,6 +72,24 @@ export default async function InterviewsPage() {
                   {interview.notes}
                 </p>
               )}
+              <div className="mt-5 flex items-center gap-2">
+                <Link
+                    href={`/interviews/${interview.id}/edit`}
+                    className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
+                >
+                    Edit
+                </Link>
+
+                <form action={deleteInterview}>
+                    <input
+                    type="hidden"
+                    name="id"
+                    value={interview.id}
+                    />
+
+                    <DeleteButton message="Are you sure you want to delete this interview?" />
+                </form>
+                </div>
             </div>
           ))}
         </div>
