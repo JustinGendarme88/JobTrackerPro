@@ -11,7 +11,7 @@ const navItems = [
   },
   {
     label: "Interviews",
-    href: "#",
+    href: "/interviews",
   },
   {
     label: "Calendar",
