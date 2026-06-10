@@ -20,6 +20,9 @@ export default async function HomePage() {
       scheduledAt: {
         gte: new Date(),
       },
+      application: {
+        userId: user.id,
+      },
     },
     include: {
       application: true,

@@ -1,10 +1,18 @@
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 import { deleteInterview } from "./actions";
 
 export default async function InterviewsPage() {
+  const user = await requireCurrentUser();
+
   const interviews = await prisma.interview.findMany({
+    where: {
+      application: {
+        userId: user.id,
+      },
+    },
     include: {
       application: true,
     },
@@ -17,9 +25,7 @@ export default async function InterviewsPage() {
     <section>
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold">
-            Interviews
-          </h1>
+          <h1 className="text-4xl font-bold">Interviews</h1>
 
           <p className="mt-2 text-zinc-400">
             Track your upcoming interviews.
@@ -36,9 +42,7 @@ export default async function InterviewsPage() {
 
       {interviews.length === 0 ? (
         <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-900 p-10 text-center">
-          <h2 className="text-2xl font-semibold">
-            No interviews scheduled
-          </h2>
+          <h2 className="text-2xl font-semibold">No interviews scheduled</h2>
 
           <p className="mt-2 text-zinc-400">
             Interviews will appear here once they are created.
@@ -51,9 +55,7 @@ export default async function InterviewsPage() {
               key={interview.id}
               className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
             >
-              <h2 className="text-xl font-semibold">
-                {interview.type}
-              </h2>
+              <h2 className="text-xl font-semibold">{interview.type}</h2>
 
               <p className="mt-2 text-zinc-400">
                 {interview.application.company}
@@ -68,28 +70,23 @@ export default async function InterviewsPage() {
               </p>
 
               {interview.notes && (
-                <p className="mt-3 text-zinc-300">
-                  {interview.notes}
-                </p>
+                <p className="mt-3 text-zinc-300">{interview.notes}</p>
               )}
+
               <div className="mt-5 flex items-center gap-2">
                 <Link
-                    href={`/interviews/${interview.id}/edit`}
-                    className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
+                  href={`/interviews/${interview.id}/edit`}
+                  className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
                 >
-                    Edit
+                  Edit
                 </Link>
 
                 <form action={deleteInterview}>
-                    <input
-                    type="hidden"
-                    name="id"
-                    value={interview.id}
-                    />
+                  <input type="hidden" name="id" value={interview.id} />
 
-                    <DeleteButton message="Are you sure you want to delete this interview?" />
+                  <DeleteButton message="Are you sure you want to delete this interview?" />
                 </form>
-                </div>
+              </div>
             </div>
           ))}
         </div>

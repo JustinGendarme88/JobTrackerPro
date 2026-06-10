@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 import { createInterview } from "../actions";
 
 export default async function NewInterviewPage() {
+  const user = await requireCurrentUser();
   const applications = await prisma.jobApplication.findMany({
+    where: {
+      userId: user.id,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -12,16 +17,11 @@ export default async function NewInterviewPage() {
   return (
     <section>
       <div className="mb-8">
-        <Link
-          href="/interviews"
-          className="text-zinc-400 hover:text-white"
-        >
+        <Link href="/interviews" className="text-zinc-400 hover:text-white">
           ← Back to interviews
         </Link>
 
-        <h1 className="mt-4 text-4xl font-bold">
-          New Interview
-        </h1>
+        <h1 className="mt-4 text-4xl font-bold">New Interview</h1>
 
         <p className="mt-2 text-zinc-400">
           Schedule an interview and link it to an existing job application.
@@ -63,9 +63,7 @@ export default async function NewInterviewPage() {
             className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
           >
             <option value="HR Screening">HR Screening</option>
-            <option value="Technical Interview">
-              Technical Interview
-            </option>
+            <option value="Technical Interview">Technical Interview</option>
             <option value="Team Interview">Team Interview</option>
             <option value="Final Interview">Final Interview</option>
           </select>

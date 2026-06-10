@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 
 export default async function CalendarPage() {
+  const user = await requireCurrentUser();
   const interviews = await prisma.interview.findMany({
+    where: {
+      application: {
+        userId: user.id,
+      },
+    },
     include: {
       application: true,
     },
