@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 import { updateInterview } from "../../actions";
 
 type EditInterviewPageProps = {
@@ -16,11 +17,15 @@ function formatDateForInput(date: Date) {
 export default async function EditInterviewPage({
   params,
 }: EditInterviewPageProps) {
+  const user = await requireCurrentUser();
   const { id } = await params;
 
-  const interview = await prisma.interview.findUnique({
+  const interview = await prisma.interview.findFirst({
     where: {
       id,
+      application: {
+        userId: user.id,
+      },
     },
   });
 
@@ -29,6 +34,9 @@ export default async function EditInterviewPage({
   }
 
   const applications = await prisma.jobApplication.findMany({
+    where: {
+      userId: user.id,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -37,16 +45,11 @@ export default async function EditInterviewPage({
   return (
     <section>
       <div className="mb-8">
-        <Link
-          href="/interviews"
-          className="text-zinc-400 hover:text-white"
-        >
+        <Link href="/interviews" className="text-zinc-400 hover:text-white">
           ← Back to interviews
         </Link>
 
-        <h1 className="mt-4 text-4xl font-bold">
-          Edit Interview
-        </h1>
+        <h1 className="mt-4 text-4xl font-bold">Edit Interview</h1>
 
         <p className="mt-2 text-zinc-400">
           Update this interview and its linked application.
@@ -90,9 +93,7 @@ export default async function EditInterviewPage({
             className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
           >
             <option value="HR Screening">HR Screening</option>
-            <option value="Technical Interview">
-              Technical Interview
-            </option>
+            <option value="Technical Interview">Technical Interview</option>
             <option value="Team Interview">Team Interview</option>
             <option value="Final Interview">Final Interview</option>
           </select>

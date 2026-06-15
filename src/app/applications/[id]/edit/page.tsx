@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/app/lib/prisma";
+import { requireCurrentUser } from "@/lib/auth";
 import { updateApplication } from "../../actions";
 
 type EditApplicationPageProps = {
@@ -12,11 +13,13 @@ type EditApplicationPageProps = {
 export default async function EditApplicationPage({
   params,
 }: EditApplicationPageProps) {
+  const user = await requireCurrentUser();
   const { id } = await params;
 
-  const application = await prisma.jobApplication.findUnique({
+  const application = await prisma.jobApplication.findFirst({
     where: {
       id,
+      userId: user.id,
     },
   });
 
@@ -27,16 +30,11 @@ export default async function EditApplicationPage({
   return (
     <section>
       <div className="max-w-2xl mx-auto">
-        <Link
-          href="/applications"
-          className="text-zinc-400 hover:text-white"
-        >
+        <Link href="/applications" className="text-zinc-400 hover:text-white">
           ← Back to applications
         </Link>
 
-        <h1 className="text-4xl font-bold mt-4 mb-8">
-          Edit Application
-        </h1>
+        <h1 className="text-4xl font-bold mt-4 mb-8">Edit Application</h1>
 
         <form action={updateApplication} className="space-y-6">
           <input type="hidden" name="id" value={application.id} />
