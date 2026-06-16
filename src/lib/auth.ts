@@ -19,15 +19,19 @@ export async function requireCurrentUser() {
     redirect("/login");
   }
 
-  const prismaUser = await prisma.user.upsert({
+  let prismaUser = await prisma.user.findUnique({
     where: {
       email: user.email,
     },
-    update: {},
-    create: {
-      email: user.email,
-    },
   });
+
+  if (!prismaUser) {
+    prismaUser = await prisma.user.create({
+      data: {
+        email: user.email,
+      },
+    });
+  }
 
   return prismaUser;
 }

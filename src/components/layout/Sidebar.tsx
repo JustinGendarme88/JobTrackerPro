@@ -10,6 +10,10 @@ const navItems = [
     href: "/applications",
   },
   {
+    label: "Kanban",
+    href: "/applications/kanban",
+  },
+  {
     label: "Interviews",
     href: "/interviews",
   },
@@ -18,8 +22,8 @@ const navItems = [
     href: "/calendar",
   },
   {
-    label: "Settings",
-    href: "#",
+  label: "Settings",
+  href: "/settings",
   },
 ];
 
