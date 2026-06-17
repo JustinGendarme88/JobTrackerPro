@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Topbar from "@/components/layout/Topbar";
-import Sidebar from "@/components/layout/Sidebar";
+import AppShell from "@/components/layout/AppShell";
 
 export const metadata: Metadata = {
   title: "Job Tracker Pro",
@@ -16,17 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="flex min-h-screen bg-zinc-950 text-white">
-          <Sidebar />
-
-          <div className="flex min-h-screen flex-1 flex-col">
-            <Topbar />
-
-            <main className="flex-1 p-6 md:p-8">
-              {children}
-            </main>
-          </div>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

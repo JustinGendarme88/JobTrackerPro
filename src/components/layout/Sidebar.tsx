@@ -3,7 +3,7 @@ import Link from "next/link";
 const navItems = [
   {
     label: "Dashboard",
-    href: "/",
+    href: "/dashboard",
   },
   {
     label: "Applications",

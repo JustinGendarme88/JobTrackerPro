@@ -1,320 +1,94 @@
 import Link from "next/link";
-import { prisma } from "@/app/lib/prisma";
-import { requireCurrentUser } from "@/lib/auth";
 
-export default async function HomePage() {
-  const user = await requireCurrentUser();
+const features = [
+  "Application tracking",
+  "Interview management",
+  "Calendar view",
+  "Kanban pipeline",
+  "Performance analytics",
+  "Secure user accounts",
+];
 
-  const applications = await prisma.jobApplication.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const upcomingInterviews = await prisma.interview.findMany({
-    where: {
-      scheduledAt: {
-        gte: new Date(),
-      },
-      application: {
-        userId: user.id,
-      },
-    },
-    include: {
-      application: true,
-    },
-    orderBy: {
-      scheduledAt: "asc",
-    },
-    take: 3,
-  });
-
-  const totalApplications = applications.length;
-
-  const interviews = applications.filter(
-    (app) => app.status === "INTERVIEW"
-  ).length;
-
-  const rejected = applications.filter(
-    (app) => app.status === "REJECTED"
-  ).length;
-
-  const interested = applications.filter(
-    (app) => app.status === "INTERESTED"
-  ).length;
-
-  const applied = applications.filter((app) => app.status === "APPLIED").length;
-
-  const interviewRate =
-    totalApplications > 0
-      ? Math.round((interviews / totalApplications) * 100)
-      : 0;
-
-  const rejectionRate =
-    totalApplications > 0
-      ? Math.round((rejected / totalApplications) * 100)
-      : 0;
-
-  const progressRate =
-    totalApplications > 0
-      ? Math.round(((interested + interviews) / totalApplications) * 100)
-      : 0;
-
-  const statusStats = [
-    {
-      label: "Applied",
-      count: applied,
-      color: "bg-blue-600",
-    },
-    {
-      label: "Interview",
-      count: interviews,
-      color: "bg-yellow-500",
-    },
-    {
-      label: "Interested",
-      count: interested,
-      color: "bg-green-600",
-    },
-    {
-      label: "Rejected",
-      count: rejected,
-      color: "bg-red-600",
-    },
-  ];
-
-  const maxStatusCount = Math.max(
-    ...statusStats.map((status) => status.count),
-    1
-  );
-
+export default function LandingPage() {
   return (
-    <section>
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10 flex items-center justify-between">
-          <div>
-            <h1 className="text-5xl font-bold">Job Tracker Pro</h1>
+    <section className="mx-auto max-w-7xl">
+      <div className="flex min-h-[75vh] flex-col items-center justify-center text-center">
+        <p className="mb-4 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
+          Job search tracking for developers and professionals
+        </p>
 
-            <p className="mt-2 text-zinc-400">
-              Track your applications and interviews
-            </p>
-          </div>
+        <h1 className="max-w-4xl text-5xl font-bold leading-tight md:text-7xl">
+          Track your job applications, interviews and progress.
+        </h1>
+
+        <p className="mt-6 max-w-2xl text-lg text-zinc-400">
+          Job Tracker Pro helps you organize applications, manage interviews,
+          view your progress with analytics, and track your hiring pipeline with
+          a Kanban board.
+        </p>
+
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+          <Link
+            href="/signup"
+            className="rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-500"
+          >
+            Get Started
+          </Link>
 
           <Link
-            href="/applications"
-            className="rounded-xl bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-500"
+            href="/login"
+            className="rounded-xl border border-zinc-700 px-6 py-3 font-semibold text-zinc-300 hover:bg-zinc-900 hover:text-white"
           >
-            View Applications
+            Login
           </Link>
         </div>
+      </div>
 
-        <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-4">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Total Applications</p>
-            <h2 className="text-4xl font-bold">{totalApplications}</h2>
-          </div>
+      <div className="mb-16 rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <h2 className="text-3xl font-bold">
+          Everything you need to manage your job search
+        </h2>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Interviews</p>
-            <h2 className="text-4xl font-bold text-blue-400">{interviews}</h2>
-          </div>
+        <p className="mt-3 max-w-3xl text-zinc-400">
+          Keep your applications, interviews, notes and hiring pipeline organized
+          in one focused workspace.
+        </p>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Interested</p>
-            <h2 className="text-4xl font-bold text-yellow-400">
-              {interested}
-            </h2>
-          </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {features.map((feature) => (
+            <div
+              key={feature}
+              className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+            >
+              <p className="font-semibold text-zinc-100">
+                ✓ {feature}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Rejected</p>
-            <h2 className="text-4xl font-bold text-red-400">{rejected}</h2>
-          </div>
+      <div className="grid gap-6 pb-16 md:grid-cols-3">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="text-xl font-bold">Application Tracking</h2>
+          <p className="mt-3 text-zinc-400">
+            Save companies, positions, locations, statuses and notes in one
+            place.
+          </p>
         </div>
 
-        <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">Performance Metrics</h2>
-
-            <p className="mt-1 text-sm text-zinc-400">
-              Key indicators based on your current application pipeline.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
-              <p className="text-sm text-zinc-400">Interview Rate</p>
-              <h3 className="mt-2 text-3xl font-bold text-blue-400">
-                {interviewRate}%
-              </h3>
-              <p className="mt-2 text-sm text-zinc-500">
-                Applications currently at interview stage.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
-              <p className="text-sm text-zinc-400">Rejection Rate</p>
-              <h3 className="mt-2 text-3xl font-bold text-red-400">
-                {rejectionRate}%
-              </h3>
-              <p className="mt-2 text-sm text-zinc-500">
-                Applications marked as rejected.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
-              <p className="text-sm text-zinc-400">Progress Rate</p>
-              <h3 className="mt-2 text-3xl font-bold text-green-400">
-                {progressRate}%
-              </h3>
-              <p className="mt-2 text-sm text-zinc-500">
-                Applications marked interested or interview.
-              </p>
-            </div>
-          </div>
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="text-xl font-bold">Interview Calendar</h2>
+          <p className="mt-3 text-zinc-400">
+            Schedule interviews and view them by date with useful details.
+          </p>
         </div>
 
-        <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Applications by Status</h2>
-
-              <p className="mt-1 text-sm text-zinc-400">
-                Overview of your current application pipeline.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {statusStats.map((status) => (
-              <div key={status.label}>
-                <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="font-medium text-zinc-300">
-                    {status.label}
-                  </span>
-
-                  <span className="text-zinc-400">{status.count}</span>
-                </div>
-
-                <div className="h-3 rounded-full bg-zinc-800">
-                  <div
-                    className={`h-3 rounded-full ${status.color}`}
-                    style={{
-                      width: `${(status.count / maxStatusCount) * 100}%`,
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-2">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Recent Applications</h2>
-
-              <Link
-                href="/applications/new"
-                className="rounded-lg bg-blue-600 px-4 py-2 hover:bg-blue-500"
-              >
-                + Add
-              </Link>
-            </div>
-
-            {applications.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-950 p-8 text-center">
-                <h3 className="text-xl font-semibold">No applications yet</h3>
-
-                <p className="mt-2 text-zinc-400">
-                  Create your first job application to start tracking your job
-                  search.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {applications.slice(0, 5).map((application) => (
-                  <div
-                    key={application.id}
-                    className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <h3 className="text-xl font-semibold">
-                          {application.position}
-                        </h3>
-
-                        <p className="text-zinc-400">
-                          {application.company}
-                        </p>
-                      </div>
-
-                      <div className="rounded-lg bg-blue-600 px-3 py-1 text-sm">
-                        {application.status}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Upcoming Interviews</h2>
-
-              <Link
-                href="/interviews/new"
-                className="rounded-lg bg-blue-600 px-4 py-2 hover:bg-blue-500"
-              >
-                + Add
-              </Link>
-            </div>
-
-            {upcomingInterviews.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-950 p-8 text-center">
-                <h3 className="text-xl font-semibold">
-                  No upcoming interviews
-                </h3>
-
-                <p className="mt-2 text-zinc-400">
-                  Scheduled interviews will appear here.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {upcomingInterviews.map((interview) => (
-                  <div
-                    key={interview.id}
-                    className="rounded-xl border border-zinc-800 bg-zinc-950 p-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="text-xl font-semibold">
-                          {interview.type}
-                        </h3>
-
-                        <p className="text-zinc-400">
-                          {interview.application.company}
-                        </p>
-
-                        <p className="text-zinc-500">
-                          {interview.application.position}
-                        </p>
-                      </div>
-
-                      <div className="text-right text-sm text-zinc-400">
-                        {interview.scheduledAt.toLocaleString()}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="text-xl font-bold">Kanban Pipeline</h2>
+          <p className="mt-3 text-zinc-400">
+            Visualize your job search pipeline from interest to interview.
+          </p>
         </div>
       </div>
     </section>
