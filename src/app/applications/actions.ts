@@ -9,6 +9,13 @@ export async function createApplication(formData: FormData) {
   const position = formData.get("position") as string;
   const location = formData.get("location") as string;
   const status = formData.get("status") as string;
+  const jobUrl = formData.get("jobUrl") as string;
+  const jobDescription = formData.get("jobDescription") as string;
+  const salary = formData.get("salary") as string;
+  const workMode = formData.get("workMode") as string;
+  const recruiterName = formData.get("recruiterName") as string;
+  const recruiterEmail = formData.get("recruiterEmail") as string;
+  const notes = formData.get("notes") as string;
 
   const user = await requireCurrentUser();
 
@@ -18,6 +25,13 @@ export async function createApplication(formData: FormData) {
       position,
       location,
       status,
+      jobUrl,
+      jobDescription,
+      salary,
+      workMode,
+      recruiterName,
+      recruiterEmail,
+      notes,
       userId: user.id,
     },
   });
@@ -45,6 +59,13 @@ export async function updateApplication(formData: FormData) {
   const position = formData.get("position") as string;
   const location = formData.get("location") as string;
   const status = formData.get("status") as string;
+  const jobUrl = formData.get("jobUrl") as string;
+  const jobDescription = formData.get("jobDescription") as string;
+  const salary = formData.get("salary") as string;
+  const workMode = formData.get("workMode") as string;
+  const recruiterName = formData.get("recruiterName") as string;
+  const recruiterEmail = formData.get("recruiterEmail") as string;
+  const notes = formData.get("notes") as string;
 
   const user = await requireCurrentUser();
 
@@ -58,6 +79,13 @@ export async function updateApplication(formData: FormData) {
       position,
       location,
       status,
+      jobUrl,
+      jobDescription,
+      salary,
+      workMode,
+      recruiterName,
+      recruiterEmail,
+      notes,
     },
   });
 

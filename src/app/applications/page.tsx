@@ -185,6 +185,71 @@ const user = await requireCurrentUser();
                 </div>
               </div>
 
+              <div className="mt-4 grid gap-3 text-sm text-zinc-400 md:grid-cols-2">
+                {application.salary && (
+                  <p>
+                    <span className="font-semibold text-zinc-300">Salary:</span>{" "}
+                    {application.salary}
+                  </p>
+                )}
+
+                {application.workMode && (
+                  <p>
+                    <span className="font-semibold text-zinc-300">Work mode:</span>{" "}
+                    {application.workMode}
+                  </p>
+                )}
+
+                {application.recruiterName && (
+                  <p>
+                    <span className="font-semibold text-zinc-300">Recruiter:</span>{" "}
+                    {application.recruiterName}
+                  </p>
+                )}
+
+                {application.recruiterEmail && (
+                  <p>
+                    <span className="font-semibold text-zinc-300">Recruiter email:</span>{" "}
+                    {application.recruiterEmail}
+                  </p>
+                )}
+              </div>
+
+              {application.jobUrl && (
+                <a
+                  href={application.jobUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-block text-sm font-semibold text-blue-400 hover:text-blue-300"
+                >
+                  Open job posting →
+                </a>
+              )}
+
+              {application.notes && (
+                <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950 p-3">
+                  <p className="mb-1 text-sm font-semibold text-zinc-300">
+                    Personal Notes
+                  </p>
+
+                  <p className="line-clamp-3 text-sm text-zinc-400">
+                    {application.notes}
+                  </p>
+                </div>
+              )}
+
+              {application.jobDescription && (
+                <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950 p-3">
+                  <p className="mb-1 text-sm font-semibold text-zinc-300">
+                    Job Description
+                  </p>
+
+                  <p className="line-clamp-4 whitespace-pre-line text-sm text-zinc-400">
+                    {application.jobDescription}
+                  </p>
+                </div>
+              )}
+
               <div className="mt-5 flex items-center gap-2">
                 <Link
                   href={`/applications/${application.id}/edit`}

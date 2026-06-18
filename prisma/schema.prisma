@@ -21,6 +21,11 @@ model JobApplication {
   location        String?
   source          String?
   jobUrl          String?
+  jobDescription String?
+  salary         String?
+  workMode       String?
+  recruiterName  String?
+  recruiterEmail String?
   notes           String?
   status          String              @default("Applied")
 
