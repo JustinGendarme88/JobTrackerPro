@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { updateApplication } from "../../actions";
+import { uploadApplicationDocument } from "../documents/actions";
 
 type EditApplicationPageProps = {
   params: Promise<{
@@ -20,6 +21,13 @@ export default async function EditApplicationPage({
     where: {
       id,
       userId: user.id,
+    },
+    include: {
+      documents: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 
@@ -179,6 +187,61 @@ export default async function EditApplicationPage({
             Save Changes
           </button>
         </form>
+
+        <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+          <h2 className="mb-4 text-xl font-semibold">Documents</h2>
+
+          <div className="mb-6 space-y-3">
+            {application.documents.length === 0 ? (
+              <p className="text-sm text-zinc-400">No documents uploaded yet.</p>
+            ) : (
+              application.documents.map((document) => (
+                <div
+                  key={document.id}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+                >
+                  <p className="font-semibold">{document.fileName}</p>
+                  <p className="text-sm text-zinc-400">{document.type}</p>
+                </div>
+              ))
+            )}
+          </div>
+
+          <form action={uploadApplicationDocument} className="space-y-4">
+            <input type="hidden" name="applicationId" value={application.id} />
+
+            <div>
+              <label className="mb-2 block">Document Type</label>
+              <select
+                name="type"
+                required
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+              >
+                <option value="JOB_OFFER_PDF">Job offer PDF</option>
+                <option value="CV_SENT">CV sent</option>
+                <option value="COVER_LETTER_SENT">Cover letter sent</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block">File</label>
+              <input
+                type="file"
+                name="file"
+                required
+                accept=".pdf,.doc,.docx"
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="rounded-lg bg-zinc-800 px-5 py-3 font-semibold hover:bg-zinc-700"
+            >
+              Upload Document
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );
