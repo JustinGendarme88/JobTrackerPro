@@ -38,6 +38,7 @@ model JobApplication {
 
   interviews      Interview[]
   stages          ApplicationStage[]
+  documents       ApplicationDocument[]
 }
 
 model Interview {
@@ -60,4 +61,18 @@ model ApplicationStage {
 
   applicationId       String
   application         JobApplication  @relation(fields: [applicationId], references: [id])
+}
+
+model ApplicationDocument {
+  id            String         @id @default(cuid())
+  type          String
+  fileName      String
+  filePath      String
+  fileSize      Int?
+  mimeType      String?
+
+  applicationId String
+  application   JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime       @default(now())
 }
