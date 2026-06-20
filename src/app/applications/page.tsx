@@ -21,6 +21,9 @@ const user = await requireCurrentUser();
   const status = params.status ?? "ALL";
 
   const applications = await prisma.jobApplication.findMany({
+  include: {
+    documents: true,
+  },
     where: {
       AND: [
         {
@@ -225,7 +228,14 @@ const user = await requireCurrentUser();
                   Open job posting →
                 </a>
               )}
-
+              {application.documents.length > 0 && (
+                <Link
+                  href={`/applications/${application.id}/edit`}
+                  className="ml-4 inline-block text-sm font-semibold text-green-400 hover:text-green-300"
+                >
+                  Documents ({application.documents.length}) →
+                </Link>
+              )}              
               {application.notes && (
                 <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950 p-3">
                   <p className="mb-1 text-sm font-semibold text-zinc-300">

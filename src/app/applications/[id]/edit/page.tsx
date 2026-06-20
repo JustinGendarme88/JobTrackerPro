@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { updateApplication } from "../../actions";
 import { uploadApplicationDocument } from "../documents/actions";
 
@@ -15,6 +16,7 @@ export default async function EditApplicationPage({
   params,
 }: EditApplicationPageProps) {
   const user = await requireCurrentUser();
+  const supabase = await createClient();
   const { id } = await params;
 
   const application = await prisma.jobApplication.findFirst({
@@ -34,6 +36,19 @@ export default async function EditApplicationPage({
   if (!application) {
     notFound();
   }
+
+  const documentsWithUrls = await Promise.all(
+    application.documents.map(async (document) => {
+      const { data } = await supabase.storage
+        .from("application-documents")
+        .createSignedUrl(document.filePath, 3600);
+
+      return {
+        ...document,
+        url: data?.signedUrl ?? null,
+      };
+    })
+  );
 
   return (
     <section>
@@ -192,16 +207,27 @@ export default async function EditApplicationPage({
           <h2 className="mb-4 text-xl font-semibold">Documents</h2>
 
           <div className="mb-6 space-y-3">
-            {application.documents.length === 0 ? (
+            {documentsWithUrls.length === 0 ? (
               <p className="text-sm text-zinc-400">No documents uploaded yet.</p>
             ) : (
-              application.documents.map((document) => (
+              documentsWithUrls.map((document) => (
                 <div
                   key={document.id}
                   className="rounded-lg border border-zinc-800 bg-zinc-950 p-3"
                 >
                   <p className="font-semibold">{document.fileName}</p>
                   <p className="text-sm text-zinc-400">{document.type}</p>
+
+                  {document.url && (
+                    <a
+                      href={document.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-block text-sm font-semibold text-blue-400 hover:text-blue-300"
+                    >
+                      Open document →
+                    </a>
+                  )}
                 </div>
               ))
             )}
