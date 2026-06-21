@@ -5,6 +5,7 @@ import { requireCurrentUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateApplication } from "../../actions";
 import { uploadApplicationDocument } from "../documents/actions";
+import { createApplicationStage } from "../stages/actions";
 
 type EditApplicationPageProps = {
   params: Promise<{
@@ -28,6 +29,11 @@ export default async function EditApplicationPage({
       documents: {
         orderBy: {
           createdAt: "desc",
+        },
+      },
+      stages: {
+        orderBy: {
+          date: "desc",
         },
       },
     },
@@ -265,6 +271,69 @@ export default async function EditApplicationPage({
               className="rounded-lg bg-zinc-800 px-5 py-3 font-semibold hover:bg-zinc-700"
             >
               Upload Document
+            </button>
+          </form>
+        </div>
+        <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+          <h2 className="mb-4 text-xl font-semibold">Recruitment Pipeline</h2>
+
+          <div className="mb-6 space-y-3">
+            {application.stages.length === 0 ? (
+              <p className="text-sm text-zinc-400">No stages recorded yet.</p>
+            ) : (
+              application.stages.map((stage) => (
+                <div
+                  key={stage.id}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+                >
+                  <p className="font-semibold">{stage.stageType}</p>
+                  <p className="text-sm text-zinc-400">
+                    {stage.date.toLocaleDateString()}
+                  </p>
+
+                  {stage.notes && (
+                    <p className="mt-2 text-sm text-zinc-300">{stage.notes}</p>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+
+          <form action={createApplicationStage} className="space-y-4">
+            <input type="hidden" name="applicationId" value={application.id} />
+
+            <div>
+              <label className="mb-2 block">Stage Type</label>
+              <select
+                name="stageType"
+                required
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+              >
+                <option value="APPLIED">Applied</option>
+                <option value="HR_SCREEN">HR Screen</option>
+                <option value="TECHNICAL_INTERVIEW">Technical Interview</option>
+                <option value="TAKE_HOME_TEST">Take Home Test</option>
+                <option value="FINAL_INTERVIEW">Final Interview</option>
+                <option value="OFFER">Offer</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block">Notes</label>
+              <textarea
+                name="notes"
+                rows={4}
+                placeholder="Add notes about this stage..."
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 p-3"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="rounded-lg bg-zinc-800 px-5 py-3 font-semibold hover:bg-zinc-700"
+            >
+              Add Stage
             </button>
           </form>
         </div>
