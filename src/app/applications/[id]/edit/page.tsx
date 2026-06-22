@@ -113,7 +113,10 @@ export default async function EditApplicationPage({
               >
                 <option value="INTERESTED">Interested</option>
                 <option value="APPLIED">Applied</option>
-                <option value="INTERVIEW">Interview</option>
+                <option value="HR_SCREEN">HR Screen</option>
+                <option value="TECHNICAL_INTERVIEW">Technical Interview</option>
+                <option value="FINAL_INTERVIEW">Final Interview</option>
+                <option value="OFFER">Offer</option>
                 <option value="REJECTED">Rejected</option>
               </select>
             </div>

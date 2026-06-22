@@ -23,6 +23,12 @@ const user = await requireCurrentUser();
   const applications = await prisma.jobApplication.findMany({
   include: {
     documents: true,
+    stages: {
+      orderBy: {
+        date: "desc",
+      },
+      take: 1,
+    },
   },
     where: {
       AND: [
@@ -217,6 +223,25 @@ const user = await requireCurrentUser();
                   </p>
                 )}
               </div>
+
+              {application.stages.length > 0 && (
+                <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950 p-3">
+                  <p className="text-sm font-semibold text-zinc-300">
+                    Current Stage
+                  </p>
+
+                  <p className="mt-1 text-sm text-zinc-400">
+                    {application.stages[0].stageType} ·{" "}
+                    {application.stages[0].date.toLocaleDateString()}
+                  </p>
+
+                  {application.stages[0].notes && (
+                    <p className="mt-2 line-clamp-2 text-sm text-zinc-500">
+                      {application.stages[0].notes}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {application.jobUrl && (
                 <a

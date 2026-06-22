@@ -34,23 +34,35 @@ export default async function HomePage() {
 
   const totalApplications = applications.length;
 
-  const interviews = applications.filter(
-    (app) => app.status === "INTERVIEW"
-  ).length;
-
-  const rejected = applications.filter(
-    (app) => app.status === "REJECTED"
-  ).length;
-
   const interested = applications.filter(
     (app) => app.status === "INTERESTED"
   ).length;
 
   const applied = applications.filter((app) => app.status === "APPLIED").length;
 
+  const hrScreen = applications.filter(
+    (app) => app.status === "HR_SCREEN"
+  ).length;
+
+  const technicalInterview = applications.filter(
+    (app) => app.status === "TECHNICAL_INTERVIEW"
+  ).length;
+
+  const finalInterview = applications.filter(
+    (app) => app.status === "FINAL_INTERVIEW"
+  ).length;
+
+  const offers = applications.filter((app) => app.status === "OFFER").length;
+
+  const rejected = applications.filter(
+    (app) => app.status === "REJECTED"
+  ).length;
+
+  const interviewPipeline = hrScreen + technicalInterview + finalInterview;
+
   const interviewRate =
     totalApplications > 0
-      ? Math.round((interviews / totalApplications) * 100)
+      ? Math.round((interviewPipeline / totalApplications) * 100)
       : 0;
 
   const rejectionRate =
@@ -60,30 +72,28 @@ export default async function HomePage() {
 
   const progressRate =
     totalApplications > 0
-      ? Math.round(((interested + interviews) / totalApplications) * 100)
+      ? Math.round(
+          ((applied + interviewPipeline + offers) / totalApplications) * 100
+        )
+      : 0;
+
+  const offerRate =
+    totalApplications > 0
+      ? Math.round((offers / totalApplications) * 100)
       : 0;
 
   const statusStats = [
+    { label: "Interested", count: interested, color: "bg-green-600" },
+    { label: "Applied", count: applied, color: "bg-blue-600" },
+    { label: "HR Screen", count: hrScreen, color: "bg-cyan-600" },
     {
-      label: "Applied",
-      count: applied,
-      color: "bg-blue-600",
-    },
-    {
-      label: "Interview",
-      count: interviews,
+      label: "Technical",
+      count: technicalInterview,
       color: "bg-yellow-500",
     },
-    {
-      label: "Interested",
-      count: interested,
-      color: "bg-green-600",
-    },
-    {
-      label: "Rejected",
-      count: rejected,
-      color: "bg-red-600",
-    },
+    { label: "Final", count: finalInterview, color: "bg-purple-600" },
+    { label: "Offer", count: offers, color: "bg-emerald-600" },
+    { label: "Rejected", count: rejected, color: "bg-red-600" },
   ];
 
   const maxStatusCount = Math.max(
@@ -118,15 +128,15 @@ export default async function HomePage() {
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Interviews</p>
-            <h2 className="text-4xl font-bold text-blue-400">{interviews}</h2>
+            <p className="mb-2 text-zinc-400">Interview Pipeline</p>
+            <h2 className="text-4xl font-bold text-blue-400">
+              {interviewPipeline}
+            </h2>
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="mb-2 text-zinc-400">Interested</p>
-            <h2 className="text-4xl font-bold text-yellow-400">
-              {interested}
-            </h2>
+            <p className="mb-2 text-zinc-400">Offers</p>
+            <h2 className="text-4xl font-bold text-emerald-400">{offers}</h2>
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
@@ -144,14 +154,24 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-4">
             <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
               <p className="text-sm text-zinc-400">Interview Rate</p>
               <h3 className="mt-2 text-3xl font-bold text-blue-400">
                 {interviewRate}%
               </h3>
               <p className="mt-2 text-sm text-zinc-500">
-                Applications currently at interview stage.
+                Applications currently in the interview pipeline.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5">
+              <p className="text-sm text-zinc-400">Offer Rate</p>
+              <h3 className="mt-2 text-3xl font-bold text-emerald-400">
+                {offerRate}%
+              </h3>
+              <p className="mt-2 text-sm text-zinc-500">
+                Applications that reached offer stage.
               </p>
             </div>
 
@@ -171,21 +191,19 @@ export default async function HomePage() {
                 {progressRate}%
               </h3>
               <p className="mt-2 text-sm text-zinc-500">
-                Applications marked interested or interview.
+                Applications beyond initial interest.
               </p>
             </div>
           </div>
         </div>
 
         <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Applications by Status</h2>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold">Applications by Status</h2>
 
-              <p className="mt-1 text-sm text-zinc-400">
-                Overview of your current application pipeline.
-              </p>
-            </div>
+            <p className="mt-1 text-sm text-zinc-400">
+              Overview of your current hiring pipeline.
+            </p>
           </div>
 
           <div className="space-y-4">
