@@ -128,7 +128,6 @@ export default async function EditApplicationPage({
               type="url"
               name="jobUrl"
               defaultValue={application.jobUrl ?? ""}
-              placeholder="https://www.linkedin.com/jobs/view/..."
               className="w-full rounded-lg border border-zinc-800 bg-zinc-900 p-3"
             />
           </div>
@@ -140,7 +139,6 @@ export default async function EditApplicationPage({
                 type="text"
                 name="salary"
                 defaultValue={application.salary ?? ""}
-                placeholder="Example: 75,000 CAD/year"
                 className="w-full rounded-lg border border-zinc-800 bg-zinc-900 p-3"
               />
             </div>
@@ -188,7 +186,6 @@ export default async function EditApplicationPage({
               name="jobDescription"
               rows={10}
               defaultValue={application.jobDescription ?? ""}
-              placeholder="Paste the job posting text here..."
               className="w-full rounded-lg border border-zinc-800 bg-zinc-900 p-3"
             />
           </div>
@@ -199,7 +196,6 @@ export default async function EditApplicationPage({
               name="notes"
               rows={5}
               defaultValue={application.notes ?? ""}
-              placeholder="Add your own notes about this application..."
               className="w-full rounded-lg border border-zinc-800 bg-zinc-900 p-3"
             />
           </div>
@@ -277,26 +273,41 @@ export default async function EditApplicationPage({
             </button>
           </form>
         </div>
+
         <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900 p-5">
-          <h2 className="mb-4 text-xl font-semibold">Recruitment Pipeline</h2>
+          <h2 className="mb-4 text-xl font-semibold">Recruitment Timeline</h2>
 
-          <div className="mb-6 space-y-3">
+          <div className="mb-6 space-y-4">
             {application.stages.length === 0 ? (
-              <p className="text-sm text-zinc-400">No stages recorded yet.</p>
+              <p className="text-sm text-zinc-400">
+                No recruitment stages yet.
+              </p>
             ) : (
-              application.stages.map((stage) => (
-                <div
-                  key={stage.id}
-                  className="rounded-lg border border-zinc-800 bg-zinc-950 p-3"
-                >
-                  <p className="font-semibold">{stage.stageType}</p>
-                  <p className="text-sm text-zinc-400">
-                    {stage.date.toLocaleDateString()}
-                  </p>
+              application.stages.map((stage, index) => (
+                <div key={stage.id} className="relative pl-8">
+                  <div className="absolute left-0 top-1 h-4 w-4 rounded-full bg-blue-500" />
 
-                  {stage.notes && (
-                    <p className="mt-2 text-sm text-zinc-300">{stage.notes}</p>
+                  {index !== application.stages.length - 1 && (
+                    <div className="absolute left-[7px] top-5 h-full w-[2px] bg-zinc-700" />
                   )}
+
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-white">
+                        {stage.stageType}
+                      </h3>
+
+                      <span className="text-sm text-zinc-400">
+                        {stage.date.toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    {stage.notes && (
+                      <p className="mt-2 text-sm text-zinc-400">
+                        {stage.notes}
+                      </p>
+                    )}
+                  </div>
                 </div>
               ))
             )}
@@ -315,7 +326,6 @@ export default async function EditApplicationPage({
                 <option value="APPLIED">Applied</option>
                 <option value="HR_SCREEN">HR Screen</option>
                 <option value="TECHNICAL_INTERVIEW">Technical Interview</option>
-                <option value="TAKE_HOME_TEST">Take Home Test</option>
                 <option value="FINAL_INTERVIEW">Final Interview</option>
                 <option value="OFFER">Offer</option>
                 <option value="REJECTED">Rejected</option>
