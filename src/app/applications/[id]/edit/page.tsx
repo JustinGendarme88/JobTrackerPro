@@ -4,7 +4,10 @@ import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateApplication } from "../../actions";
-import { uploadApplicationDocument } from "../documents/actions";
+import {
+  uploadApplicationDocument,
+  deleteApplicationDocument,
+} from "../documents/actions";
 import { createApplicationStage } from "../stages/actions";
 
 type EditApplicationPageProps = {
@@ -232,7 +235,19 @@ export default async function EditApplicationPage({
                     >
                       Open document →
                     </a>
+                    
                   )}
+
+                  <form action={deleteApplicationDocument} className="mt-3">
+                    <input type="hidden" name="documentId" value={document.id} />
+
+                    <button
+                      type="submit"
+                      className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold hover:bg-red-500"
+                    >
+                      Delete document
+                    </button>
+                  </form>
                 </div>
               ))
             )}

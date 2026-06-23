@@ -55,3 +55,44 @@ export async function uploadApplicationDocument(formData: FormData) {
   revalidatePath(`/applications/${applicationId}/edit`);
   revalidatePath("/applications");
 }
+
+export async function deleteApplicationDocument(formData: FormData) {
+  const user = await requireCurrentUser();
+  const supabase = await createClient();
+
+  const documentId = formData.get("documentId") as string;
+
+  if (!documentId) {
+    return;
+  }
+
+  const document = await prisma.applicationDocument.findFirst({
+    where: {
+      id: documentId,
+      application: {
+        userId: user.id,
+      },
+    },
+  });
+
+  if (!document) {
+    return;
+  }
+
+  const { error } = await supabase.storage
+    .from("application-documents")
+    .remove([document.filePath]);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await prisma.applicationDocument.delete({
+    where: {
+      id: document.id,
+    },
+  });
+
+  revalidatePath(`/applications/${document.applicationId}/edit`);
+  revalidatePath("/applications");
+}
