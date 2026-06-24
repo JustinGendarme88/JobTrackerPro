@@ -225,6 +225,15 @@ export default async function EditApplicationPage({
                 >
                   <p className="font-semibold">{document.fileName}</p>
                   <p className="text-sm text-zinc-400">{document.type}</p>
+                  <p className="mt-1 text-sm text-zinc-500">
+                    Uploaded: {document.createdAt.toLocaleDateString()}
+                  </p>
+
+                  {document.fileSize && (
+                    <p className="text-sm text-zinc-500">
+                      Size: {Math.round(document.fileSize / 1024)} KB
+                    </p>
+                  )}
 
                   {document.url && (
                     <a
