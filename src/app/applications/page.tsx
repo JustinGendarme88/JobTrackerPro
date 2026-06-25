@@ -176,9 +176,12 @@ const user = await requireCurrentUser();
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-semibold">
+                  <Link
+                    href={`/applications/${application.id}`}
+                    className="text-2xl font-semibold hover:text-blue-400"
+                  >
                     {application.position}
-                  </h2>
+                  </Link>
 
                   <p className="text-zinc-400">{application.company}</p>
 
@@ -286,6 +289,13 @@ const user = await requireCurrentUser();
               )}
 
               <div className="mt-5 flex items-center gap-2">
+                <Link
+                  href={`/applications/${application.id}`}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold hover:bg-blue-500"
+                >
+                  View
+                </Link>
+
                 <Link
                   href={`/applications/${application.id}/edit`}
                   className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-black hover:bg-yellow-400"
