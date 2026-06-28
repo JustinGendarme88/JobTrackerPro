@@ -1,6 +1,17 @@
 import { login } from "./actions";
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{
+    success?: string;
+    error?: string;
+  }>;
+};
+
+export default async function LoginPage({
+  searchParams,
+}: LoginPageProps) {
+  const params = await searchParams;
+
   return (
     <section className="flex min-h-[70vh] items-center justify-center">
       <form
@@ -12,6 +23,18 @@ export default function LoginPage() {
         <p className="mt-2 text-zinc-400">
           Sign in to access your job tracker.
         </p>
+
+        {params.success === "account_created" && (
+          <div className="mt-4 rounded-lg border border-green-800 bg-green-950/40 p-4 text-green-300">
+            Account created successfully. You can now sign in.
+          </div>
+        )}
+
+        {params.error === "invalid_credentials" && (
+          <div className="mt-4 rounded-lg border border-red-800 bg-red-950/40 p-4 text-red-300">
+            Invalid email or password.
+          </div>
+        )}
 
         <div className="mt-6">
           <label className="mb-2 block text-sm text-zinc-300">
@@ -37,6 +60,14 @@ export default function LoginPage() {
             required
             className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
           />
+          <div className="mt-2 text-right">
+            <a
+              href="/forgot-password"
+              className="text-sm text-blue-400 hover:text-blue-300"
+            >
+              Forgot your password?
+            </a>
+          </div>
         </div>
 
         <button

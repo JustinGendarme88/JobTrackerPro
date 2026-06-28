@@ -106,10 +106,16 @@ export default async function HomePage() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex items-center justify-between">
           <div>
-            <h1 className="text-5xl font-bold">Job Tracker Pro</h1>
+            <h1 className="text-5xl font-bold">
+              Welcome back
+            </h1>
 
             <p className="mt-2 text-zinc-400">
-              Track your applications and interviews
+              Ready to continue tracking your job search?
+            </p>
+
+            <p className="mt-2 text-sm text-zinc-500">
+              Signed in as {user.email}
             </p>
           </div>
 

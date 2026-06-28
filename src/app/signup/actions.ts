@@ -19,5 +19,5 @@ export async function signup(formData: FormData) {
     redirect("/signup?error=signup_failed");
   }
 
-  redirect("/login");
+  redirect("/login?success=account_created");
 }
