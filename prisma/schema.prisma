@@ -48,7 +48,7 @@ model Interview {
   notes               String?
 
   applicationId       String
-  application         JobApplication  @relation(fields: [applicationId], references: [id])
+  application         JobApplication  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   createdAt           DateTime        @default(now())
 }
@@ -60,7 +60,7 @@ model ApplicationStage {
   date                DateTime        @default(now())
 
   applicationId       String
-  application         JobApplication  @relation(fields: [applicationId], references: [id])
+  application         JobApplication  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
 model ApplicationDocument {
