@@ -3,6 +3,8 @@ import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { deleteApplication } from "./actions";
 import DeleteButton from "@/components/DeleteButton";
+import StatusBadge from "@/components/StatusBadge";
+import { formatDate } from "@/lib/formatDate";
 
 type ApplicationsPageProps = {
   searchParams: Promise<{
@@ -71,20 +73,7 @@ const user = await requireCurrentUser();
     },
   });
 
-  function getStatusColor(status: string) {
-    switch (status) {
-      case "APPLIED":
-        return "bg-blue-600";
-      case "INTERVIEW":
-        return "bg-yellow-500 text-black";
-      case "REJECTED":
-        return "bg-red-600";
-      case "INTERESTED":
-        return "bg-green-600";
-      default:
-        return "bg-zinc-600";
-    }
-  }
+
 
   return (
     <section>
@@ -188,13 +177,9 @@ const user = await requireCurrentUser();
                   <p className="text-zinc-500">{application.location}</p>
                 </div>
 
-                <div
-                  className={`rounded-lg px-3 py-1 text-sm ${getStatusColor(
-                    application.status
-                  )}`}
-                >
-                  {application.status}
-                </div>
+                
+                  <StatusBadge status={application.status} />
+                
               </div>
 
               <div className="mt-4 grid gap-3 text-sm text-zinc-400 md:grid-cols-2">
@@ -233,10 +218,15 @@ const user = await requireCurrentUser();
                     Current Stage
                   </p>
 
-                  <p className="mt-1 text-sm text-zinc-400">
-                    {application.stages[0].stageType} ·{" "}
-                    {application.stages[0].date.toLocaleDateString()}
-                  </p>
+
+                  <div className="mt-2 flex items-center gap-2">
+
+                    <StatusBadge status={application.stages[0].stageType} />
+
+                    <span className="text-sm text-zinc-500">
+                      {formatDate(application.stages[0].date)}
+                    </span>
+                  </div>
 
                   {application.stages[0].notes && (
                     <p className="mt-2 line-clamp-2 text-sm text-zinc-500">

@@ -3,6 +3,7 @@ import DeleteButton from "@/components/DeleteButton";
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { deleteInterview } from "./actions";
+import { formatDateTime } from "@/lib/formatDate";
 
 export default async function InterviewsPage() {
   const user = await requireCurrentUser();
@@ -66,7 +67,7 @@ export default async function InterviewsPage() {
               </p>
 
               <p className="mt-3 text-sm text-zinc-400">
-                {interview.scheduledAt.toLocaleString()}
+                {formatDateTime(interview.scheduledAt)}
               </p>
 
               {interview.notes && (

@@ -3,6 +3,7 @@ import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { deleteInterview } from "@/app/interviews/actions";
 import DeleteButton from "@/components/DeleteButton";
+import { formatDate, formatLongDate } from "@/lib/formatDate";
 
 export default async function CalendarPage() {
   const user = await requireCurrentUser();
@@ -23,12 +24,7 @@ export default async function CalendarPage() {
 
   const groupedInterviews = interviews.reduce<Record<string, typeof interviews>>(
     (groups, interview) => {
-      const dateKey = interview.scheduledAt.toLocaleDateString("en-CA", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      const dateKey = formatLongDate(interview.scheduledAt);
 
       if (!groups[dateKey]) {
         groups[dateKey] = [];

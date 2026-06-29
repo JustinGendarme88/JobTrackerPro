@@ -1,6 +1,7 @@
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { updatePassword } from "./actions";
+import { formatDateTime } from "@/lib/formatDate";
 
 type SettingsPageProps = {
   searchParams: Promise<{
@@ -97,7 +98,7 @@ export default async function SettingsPage({
               <p className="text-sm text-zinc-400">Account created</p>
 
               <p className="text-zinc-200">
-                {user.createdAt.toLocaleDateString()}
+                {formatDateTime(user.createdAt)}
               </p>
             </div>
           </div>

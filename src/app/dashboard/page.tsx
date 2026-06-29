@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
+import { formatDateTime } from "@/lib/formatDate";
 
 export default async function HomePage() {
   const user = await requireCurrentUser();
@@ -331,7 +332,7 @@ export default async function HomePage() {
                       </div>
 
                       <div className="text-right text-sm text-zinc-400">
-                        {interview.scheduledAt.toLocaleString()}
+                        {formatDateTime(interview.scheduledAt)}
                       </div>
                     </div>
                   </div>
