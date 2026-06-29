@@ -10,7 +10,9 @@ A modern full-stack SaaS application for tracking job applications, interviews, 
 
 Built with **Next.js**, **TypeScript**, **Prisma** and **Supabase**.
 
+
 ---
+
 
 ## Screenshots
 
