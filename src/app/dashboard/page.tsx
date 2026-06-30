@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/app/lib/prisma";
 import { requireCurrentUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/formatDate";
+import StatusBadge from "@/components/StatusBadge";
 
 export default async function HomePage() {
   const user = await requireCurrentUser();
@@ -105,27 +106,45 @@ export default async function HomePage() {
   return (
     <section>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 flex items-center justify-between">
+        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-5xl font-bold">
-              Welcome back
-            </h1>
-
-            <p className="mt-2 text-zinc-400">
-              Ready to continue tracking your job search?
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-400">
+              Dashboard
             </p>
 
-            <p className="mt-2 text-sm text-zinc-500">
-              Signed in as {user.email}
+            <h1 className="text-5xl font-bold">Welcome back!</h1>
+
+            <p className="mt-3 text-lg text-zinc-300">
+              Here&apos;s an overview of your current job search.
             </p>
+
+            <div className="mt-6 inline-flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                {user.email.charAt(0).toUpperCase()}
+              </div>
+
+              <div>
+                <p className="text-sm text-zinc-500">Signed in as</p>
+                <p className="font-medium text-white">{user.email}</p>
+              </div>
+            </div>
           </div>
 
-          <Link
-            href="/applications"
-            className="rounded-xl bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-500"
-          >
-            View Applications
-          </Link>
+          <div className="flex items-start gap-3">
+            <Link
+              href="/applications/new"
+              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-500"
+            >
+              + Add Application
+            </Link>
+
+            <Link
+              href="/applications"
+              className="inline-flex items-center justify-center rounded-xl border border-zinc-700 px-5 py-3 font-semibold text-zinc-300 hover:bg-zinc-900 hover:text-white"
+            >
+              View Applications
+            </Link>
+          </div>
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -277,9 +296,7 @@ export default async function HomePage() {
                         </p>
                       </div>
 
-                      <div className="rounded-lg bg-blue-600 px-3 py-1 text-sm">
-                        {application.status}
-                      </div>
+                      <StatusBadge status={application.status} />
                     </div>
                   </div>
                 ))}
