@@ -5,6 +5,9 @@ import AppShell from "@/components/layout/AppShell";
 export const metadata: Metadata = {
   title: "Job Tracker Pro",
   description: "Track your job applications, interviews, and opportunities.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
