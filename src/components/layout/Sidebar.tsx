@@ -56,12 +56,7 @@ export default function Sidebar() {
         + Add Application
       </Link>
 
-      <div className="mt-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4">
-        <p className="text-sm font-medium">Next step</p>
-        <p className="mt-1 text-sm text-zinc-400">
-          Add filters, auth, and calendar features.
-        </p>
-      </div>
+      
     </aside>
   );
 }
