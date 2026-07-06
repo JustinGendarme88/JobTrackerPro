@@ -12,12 +12,17 @@ export async function sendPasswordResetEmail(formData: FormData) {
     redirect("/forgot-password?error=missing_email");
   }
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://job-tracker-pro-one.vercel.app";
+
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
+    redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
   });
 
   if (error) {
-    redirect("/forgot-password?error=reset_failed");
+    console.error("RESET PASSWORD ERROR:", error.message);
+    redirect(`/forgot-password?error=${encodeURIComponent(error.message)}`);
   }
 
   redirect("/forgot-password?success=email_sent");

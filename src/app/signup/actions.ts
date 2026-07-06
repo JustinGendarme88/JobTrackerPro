@@ -25,17 +25,24 @@ export async function signup(formData: FormData) {
     redirect("/signup?error=weak_password");
   }
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://job-tracker-pro-one.vercel.app";
+
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo: `${siteUrl}/auth/callback`,
     },
   });
 
   if (error) {
-    console.error(error);
-    redirect("/signup?error=signup_failed");
+    console.error("SIGNUP ERROR:", error);
+
+    redirect(
+      `/signup?error=${encodeURIComponent(error.message)}`
+    );
   }
 
   redirect("/login?success=account_created");
