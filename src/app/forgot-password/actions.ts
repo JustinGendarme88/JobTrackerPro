@@ -13,7 +13,7 @@ export async function sendPasswordResetEmail(formData: FormData) {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/auth/callback?next=/reset-password",
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
   });
 
   if (error) {
