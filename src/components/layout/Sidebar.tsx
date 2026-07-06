@@ -29,7 +29,7 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <aside className="hidden min-h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-950 px-6 py-6 text-white md:flex">
+    <aside className="hidden min-h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-950 px-6 py-6 text-white sm:flex">
       <div className="mb-10">
         <h1 className="text-xl font-bold">Job Tracker Pro</h1>
         <p className="mt-1 text-sm text-zinc-400">

@@ -7,7 +7,7 @@ export default function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="md:hidden">
+    <div className="sm:hidden">
       <button
         onClick={() => setIsOpen(true)}
         className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white"
@@ -33,7 +33,7 @@ export default function MobileNav() {
 
             <nav className="flex flex-col gap-2">
               <Link
-                href="/"
+                href="/dashboard"
                 onClick={() => setIsOpen(false)}
                 className="rounded-lg px-4 py-2 text-zinc-300 hover:bg-zinc-800 hover:text-white"
               >
