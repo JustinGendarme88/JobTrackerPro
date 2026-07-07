@@ -2,13 +2,19 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)
 ![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E)
-
+![Vercel](https://img.shields.io/badge/Deployment-Vercel-black)
 
 # Job Tracker Pro
 
 A modern full-stack SaaS application for tracking job applications, interviews, recruitment progress and documents.
 
 Built with **Next.js**, **TypeScript**, **Prisma** and **Supabase**.
+
+## 🌐 Live Demo
+
+**Application:** https://job-tracker-pro-one.vercel.app
+
+**Demo account:** Available upon request for recruiters.
 
 
 ---
@@ -218,9 +224,8 @@ src/
 
 Justin Gendarme
 
-GitHub:
-
-https://github.com/JustinGendarme88
+- GitHub: https://github.com/JustinGendarme88
+- LinkedIn: https://www.linkedin.com/in/justin-gendarme-2aba2b368
 
 ---
 
